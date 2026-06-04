@@ -1,5 +1,6 @@
 from flask import Flask
 app = Flask(__name__) #It creates the Flask application object and uses __name__ to help Flask locate resources such as templates and static files.
+#CRUD APP
 students = [
     {
         "name":"Deva",
@@ -12,9 +13,16 @@ students = [
  #Register home() for the URL "/"
 def home():
     return "Hello from API"
-@app.route("/students")
+@app.route("/students",methods=["GET"])
 def get_students():
-    return students
+    return students,200
+@app.route("/students/<id:int>",methods=["GET"])
+def get_one_student(id):
+    for student in students:
+        if student["id"]==id:
+            return student,200
+    return {"error:student not found"},404
+
 #does not work in browsers
 @app.route("/students",methods=["POST"])
 def create_students():
